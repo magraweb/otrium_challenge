@@ -25,7 +25,7 @@ define('SITE_URL',"{SITE_URL}"); <br/><br/>
 </p>
  </dd>
 
-Then go to your browser and run following SITE_URL path
+<p>Then go to your browser and run following SITE_URL path</p>
 
 
 <h3 align="left">Tech Stack </h3>
@@ -34,6 +34,9 @@ MySQL
 PHP
 HTML / CSS 
 Boostrap
+
+<h3 align="left">Sample CSV files on download folder</h3>
+
 
 <h3 align="left">To run unit test
 open command prompt
