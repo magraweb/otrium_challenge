@@ -1,22 +1,22 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'e0059ddeca1a4725b7e78e1ad52ffc5ce19d34fc',
+        'reference' => NULL,
         'name' => '__root__',
         'dev' => true,
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'e0059ddeca1a4725b7e78e1ad52ffc5ce19d34fc',
+            'reference' => NULL,
             'dev_requirement' => false,
         ),
         'doctrine/instantiator' => array(
@@ -95,12 +95,12 @@
             'dev_requirement' => true,
         ),
         'phpunit/php-code-coverage' => array(
-            'pretty_version' => '7.0.14',
-            'version' => '7.0.14.0',
+            'pretty_version' => '7.0.15',
+            'version' => '7.0.15.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/php-code-coverage',
             'aliases' => array(),
-            'reference' => 'bb7c9a210c72e4709cdde67f8b7362f672f2225c',
+            'reference' => '819f92bba8b001d4363065928088de22f25a3a48',
             'dev_requirement' => true,
         ),
         'phpunit/php-file-iterator' => array(
@@ -131,12 +131,12 @@
             'dev_requirement' => true,
         ),
         'phpunit/php-token-stream' => array(
-            'pretty_version' => '3.1.2',
-            'version' => '3.1.2.0',
+            'pretty_version' => '3.1.3',
+            'version' => '3.1.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/php-token-stream',
             'aliases' => array(),
-            'reference' => '472b687829041c24b25f475e14c2f38a09edf1c2',
+            'reference' => '9c1da83261628cb24b6a6df371b6e312b3954768',
             'dev_requirement' => true,
         ),
         'phpunit/phpunit' => array(
@@ -257,12 +257,12 @@
             'dev_requirement' => true,
         ),
         'theseer/tokenizer' => array(
-            'pretty_version' => '1.2.0',
-            'version' => '1.2.0.0',
+            'pretty_version' => '1.2.1',
+            'version' => '1.2.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../theseer/tokenizer',
             'aliases' => array(),
-            'reference' => '75a63c33a8577608444246075ea0af0d052e452a',
+            'reference' => '34a41e998c2183e22995f158c581e7b5e755ab9e',
             'dev_requirement' => true,
         ),
         'webmozart/assert' => array(
