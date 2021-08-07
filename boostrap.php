@@ -2,7 +2,8 @@
 
 function boostrap($className)
 {
-    $folderPath = '';
+    echo 'calling boostrap';
+    $folderPath = 'Reports/TurnOverReports';
     $classNameParts = explode('\\', $className);
 
     foreach ($classNameParts as $key => $value) {
@@ -23,3 +24,11 @@ function boostrap($className)
 }
 
 spl_autoload_register('boostrap');
+
+
+try {
+    $actionFactory = new  Apps\AppsContoller();
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+

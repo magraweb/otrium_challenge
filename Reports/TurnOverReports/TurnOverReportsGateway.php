@@ -2,12 +2,16 @@
 
 namespace Reports\TurnOverReports;
 
+include('e:/xampp/htdocs/task_new/Reports/AbstractReport.php'); 
+include('e:/xampp/htdocs/task_new/Apps/DatabaseConnection.php'); 
+
+
 use Exception;
 use Reports\AbstractReport;
 use Apps\Helpers\MapData;
-use Reports\TurnOverReports\Models\TurnoverPerBrand;
-use Reports\TurnOverReports\Models\TurnoverPerDay;
-use Reports\TurnOverReports\Models\TurnoverTopSelling;
+use Model\TurnoverPerBrand;
+use Model\TurnoverPerDay;
+use Model\TurnoverTopSelling;
 
 class TurnOverReportsGateway extends AbstractReport
 {
@@ -81,7 +85,7 @@ class TurnOverReportsGateway extends AbstractReport
 
             $sql = "SELECT brands.name,gmv.date, SUM(gmv.turnover - (gmv.turnover * 21/100))  as sum from brands 
             LEFT JOIN gmv ON brands.id = gmv.brand_id 
-            WHERE gmv.date BETWEEN $startDate AND $endDate HAVING sum GROUP BY gmv.date " ;
+            WHERE gmv.date BETWEEN $startDate AND $endDate  GROUP BY gmv.date " ;
 
             $data = $this->getReportsDataFromDatabase($sql);
  

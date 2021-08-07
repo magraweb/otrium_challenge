@@ -1,59 +1,67 @@
-<?php
+<?php 
+
 namespace Apps;
+
 //require_once  ('Routes/web.php');
-require_once ('../boostrap.php');
-require_once ('../Config/config.php');
+//require_once ('../boostrap.php');
+require_once ('../Config/config.php'); 
+require_once ('e:/xampp/htdocs/task_new/Model/TurnOverPerBrand.php');
+require_once ('e:/xampp/htdocs/task_new/Model/TurnoverPerDay.php');
+require_once ('e:/xampp/htdocs/task_new/Model/TurnoverTopSelling.php');
+
 
 class AppsContoller
 {
     private $request_url;
-    private $routeConfig;
+   // private $routeConfig;
     private $webArray;
 
     const _REPORT = 'reports';
 
     public function __construct()
-    {
-        $this->request_url = $_SERVER['REQUEST_URI'];
-  
-        $this->RunActionReport();
- 
+    { 
+        $this->setRoute('TurnOverPerBrand'); //$_GET
+        $this->RunActionReport(); 
     }
 
     private function getRoute()
-    {
-        if (!isset($this->routeConfig)) {
-            $this->setRoute();
-        }
-
-        return $this->routeConfig;
+    { 
+        return $this->request_url;
     }
 
-    private function setRoute()
-    {
-        //$this->routeConfig = $this->webArray;
-        $this->routeConfig = include 'Routes/web.php';
-    }
+    function setRoute($url)
+	{
+		$this->request_url = $url;
+	}
 
     public function RunActionReport()
     {
         echo 'working';
-        if ($this->getRoute()['routes'][$this->request_url]) {
- 
-            // get the raw POST data
-            $rawData = file_get_contents("php://input");
-  
-            $class =  $this->getRoute()['routes'][$this->request_url]['controller'];
-            $classObj = new  $class();
-            $data = $classObj->{$this->getRoute()['routes'][$this->request_url]['action']}($rawData);
 
-            header('Location:'.SITE_URL.'?e='. $data);
+        echo $_REQUEST['action'];
+
+        if ($this->getRoute()) { 
+
+            $class =  $this->getRoute();
+            $classObj = new  $class();
+            $data = $classObj->{$this->getRoute()};
+
+            print_r($data);
+
+            //header('Location:'.SITE_URL.'?e='. $data);
 
         } else {
             throw new \Exception('Request Url Not Found');
-            header('Location:'.SITE_URL.'?e=Request Url Not Found');
+            //header('Location:'.SITE_URL.'?e=Request Url Not Found');
 
         }
     }
 
+}
+
+ 
+try {
+    $actionFactory = new  AppsContoller();
+} catch (\Exception $e) {
+    echo $e->getMessage();
 }

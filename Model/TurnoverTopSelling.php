@@ -1,12 +1,24 @@
 <?php
 
-namespace Reports\TurnOverReports\Models;
+namespace Model;
 
-class TurnoverPerDay
+class TurnoverTopSelling
 {
+    private $brandName;
     private $day;
     private $totalTurnOver;
-  
+   
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
+        return $this;
+    }
+ 
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+    
     public function setDay($day)
     {
         $this->day = $day;
@@ -32,6 +44,7 @@ class TurnoverPerDay
     public function toArray()
     {
         $data = array();
+        $data['brandName'] = $this->brandName;
         $data['day'] = $this->day;
         $data['totalTurnOver'] = $this->totalTurnOver; 
         return $data;

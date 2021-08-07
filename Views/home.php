@@ -35,12 +35,11 @@
 
  
         <figure class="text-center">
-            <blockquote class=" ">
-  
+            <blockquote class=" "> 
 
-                <a href="Apps/AppsContoller.php?t=turn-over-per-brand" type="submit" class="btn btn-primary">Brand Report</a>
-                <a href="Apps/AppsContoller.php?t=turn-over-per-day" type="submit" class="btn btn-primary">Day Report</a>
-                <a href="Apps/AppsContoller.php?t=turn-over-top-selling" type="submit" class="btn btn-primary">Top Selling</a>
+                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-brand" type="submit" class="btn btn-primary">Brand Report</a>
+                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-day" type="submit" class="btn btn-primary">Day Report</a>
+                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-day-per-brand" type="submit" class="btn btn-primary">Top Selling</a>
 
             </blockquote>
         </figure> 

@@ -1,17 +1,26 @@
 <?php declare(strict_types=1);
 
-use \PHPUnit\Framework\TestCase;
-use Reports\TurnOverReports\Models\TurnoverPerBrand;
-use Reports\TurnOverReports\Models\TurnoverPerDay;
-use Reports\TurnOverReports\Models\TurnoverTopSelling;
+require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
+require_once ('e:/xampp/htdocs/task_new/Model/TurnOverPerBrand.php');
+require_once ('e:/xampp/htdocs/task_new/Model/TurnoverPerDay.php');
+require_once ('e:/xampp/htdocs/task_new/Model/TurnoverTopSelling.php');
 
+require_once ('e:/xampp/htdocs/task_new/Reports/TurnOverReports/TurnOverReportsController.php');
+require_once ('e:/xampp/htdocs/task_new/Reports/TurnOverReports/TurnOverReportsGateway.php');
+require_once ('e:/xampp/htdocs/task_new/Apps/Healper/MapData.php');
+
+use \PHPUnit\Framework\TestCase;
+use Model\TurnoverPerBrand as TurnoverPerBrand;
+use Model\TurnoverPerDay as TurnoverPerDay;
+use Model\TurnoverTopSelling as TurnoverTopSelling;
+use Reports\TurnOverReports as Gateway;
 
 class TurnOverReportsGatewayTest extends TestCase
 {
 
     public function testTurnOverPerBrand()
     {
-        $reportsGateway = new Reports\TurnOverReports\TurnOverReportsGateway();
+        $reportsGateway = new Gateway\TurnOverReportsGateway();
         $requestData['startDate'] = '2018-05-01';
         $requestData['endDate'] = '2018-05-07';  
         $requestData['reportType'] = 'TURNOVER_PER_BRAND';
@@ -25,7 +34,7 @@ class TurnOverReportsGatewayTest extends TestCase
 
     public function testTurnOverPerDay()
     {
-        $reportsGateway = new Reports\TurnOverReports\TurnOverReportsGateway();
+        $reportsGateway = new Gateway\TurnOverReportsGateway();
         $requestData['startDate'] = '2018-05-01';
         $requestData['endDate'] = '2018-05-07';  
         $requestData['reportType'] = 'TURNOVER_PER_DAY';
@@ -39,7 +48,7 @@ class TurnOverReportsGatewayTest extends TestCase
 
     public function testTurnoverTopSelling()
     {
-        $reportsGateway = new Reports\TurnOverReports\TurnOverReportsGateway();
+        $reportsGateway = new Gateway\TurnOverReportsGateway();
         $requestData['startDate'] = '2018-05-01';
         $requestData['endDate'] = '2018-05-07';  
         $requestData['reportType'] = 'TURNOVER_TOP_SELLING';
