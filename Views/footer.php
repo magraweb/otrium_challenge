@@ -7,7 +7,7 @@
 
     <div class="container text-center">
 
-        <span>Report App V2</span>
+        <span>Report App  <?= VERSION ?></span>
 
     </div>
 

@@ -32,7 +32,7 @@ class TurnoverPerBrand
     public function toArray()
     {
         $data = array();
-        $data['brandName'] = $this->brandName;
+        $data['brandName'] = $this->brandName; 
         $data['totalTurnOver'] = $this->totalTurnOver; 
         return $data;
     }

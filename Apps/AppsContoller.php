@@ -1,26 +1,27 @@
 <?php 
 
 namespace Apps;
-
-//require_once  ('Routes/web.php');
-//require_once ('../boostrap.php');
+ 
 require_once ('../Config/config.php'); 
-require_once ('e:/xampp/htdocs/task_new/Model/TurnOverPerBrand.php');
-require_once ('e:/xampp/htdocs/task_new/Model/TurnoverPerDay.php');
-require_once ('e:/xampp/htdocs/task_new/Model/TurnoverTopSelling.php');
-
+require_once (DOC_ROOT.'Model/TurnOverPerBrand.php');
+require_once (DOC_ROOT.'Model/TurnoverPerDay.php');
+require_once (DOC_ROOT.'Model/TurnoverTopSelling.php');
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsController.php'); 
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsService.php'); 
+ 
+use Reports\TurnOverReports as Tor;
 
 class AppsContoller
 {
     private $request_url;
-   // private $routeConfig;
-    private $webArray;
-
-    const _REPORT = 'reports';
-
+    private $start_date;
+    private $end_date;
+  
     public function __construct()
-    { 
-        $this->setRoute('TurnOverPerBrand'); //$_GET
+    {   
+        $this->setStartDate(date("Y-m-d",strtotime(trim($_POST['startDate'])))); //'2018-05-01'
+        $this->setEndDate(date("Y-m-d",strtotime(trim($_POST['endDate'])))); //$_GET'2018-05-07'
+        $this->setRoute(trim($_POST['reportType'])); // turnOverPerBrand  | turnoverPerDay | turnoverTopSelling
         $this->RunActionReport(); 
     }
 
@@ -34,26 +35,41 @@ class AppsContoller
 		$this->request_url = $url;
 	}
 
+    private function getStartDate()
+    { 
+        return $this->start_date;
+    }
+
+    function setStartDate($startDate)
+	{
+		$this->start_date = $startDate;
+	}
+
+    private function getEndDate()
+    { 
+        return $this->end_date;
+    }
+
+    function setEndDate($endDate)
+	{
+		$this->end_date = $endDate;
+	}
+
     public function RunActionReport()
-    {
-        echo 'working';
-
-        echo $_REQUEST['action'];
-
+    { 
+        $reqArr=array(
+            'startDate'=> $this->getStartDate(),
+            'endDate'=> $this->getEndDate(),
+            'reportType'=>$this->getRoute()
+        );
+ 
         if ($this->getRoute()) { 
-
-            $class =  $this->getRoute();
-            $classObj = new  $class();
-            $data = $classObj->{$this->getRoute()};
-
-            print_r($data);
-
-            //header('Location:'.SITE_URL.'?e='. $data);
+ 
+            $classObj = new Tor\TurnOverReportsController(); 
+            $classObj->{$this->getRoute()}($reqArr); 
 
         } else {
-            throw new \Exception('Request Url Not Found');
-            //header('Location:'.SITE_URL.'?e=Request Url Not Found');
-
+            throw new \Exception('Request Url Not Found');  
         }
     }
 

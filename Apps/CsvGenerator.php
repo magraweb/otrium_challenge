@@ -2,29 +2,22 @@
 
 namespace Apps;
 
+//require_once ('../Config/config.php'); 
+require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
+
 use PHPUnit\TextUI\XmlConfiguration\Csv;
 
 class CsvGenerator
 {
 
-    private $fileMetaData;
-    const _REPORT_FOLDER = 'public/downloads';
+    public $fileMetaData;
+    const _REPORT_FOLDER = DOC_ROOT.'public/downloads';
     public static $instance;
 
     private function __construct($data)
     {
         $this->fileMetaData = $data;
-    }
-  
-    private function getFileLocation($fileName)
-    {
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $domainName = $_SERVER['HTTP_HOST'] . '/';
-
-        $fileLocation = $protocol . $domainName . self::_REPORT_FOLDER . '/' . $fileName;
-
-        return $fileLocation;
-    }
+    } 
 
     public static function getInstance($data)
     {
@@ -36,35 +29,56 @@ class CsvGenerator
         return CsvGenerator::$instance;
     }
 
-    public function generateCsvFile($contentData = null)
+    public function generateCsvFile($contentData = null,array $fileMetaData)
     {
-        try {
-
-           
-            if (!file_exists(__DIR__ . '/../' . self::_REPORT_FOLDER)) {
-                mkdir(__DIR__ . '/../' . self::_REPORT_FOLDER, 0777, true);
+    
+        try { 
+            if (!file_exists(DOC_ROOT.self::_REPORT_FOLDER)) {
+                mkdir(DOC_ROOT.self::_REPORT_FOLDER, 0777, true);
             }
 
             $filename   = 'Report-';
-            $filename = $filename . ' - ' . date('Y-m-d') . ' at ' . date('g.i a');
-            $dataArray = array('-1' => $filename) + $contentData;
-            header('Content-Type: text/csv; charset=utf-8');
-            header('Content-Disposition: attachment; filename="' . str_replace('"', '\\"', $filename) . '.csv"');
-            $outstream = fopen("php://output", "w");
-
-            function __outputCSV(&$vals, $key, $filehandler) {
-                fputcsv($filehandler, $vals);
+            $filename = $filename . ' - ' . date('Y-m-d') . ' at ' . date('g.i a').'.csv';
+        
+            $output = fopen("php://output",'w') or die("Can't open php://output");
+            header("Content-Type:application/csv"); 
+            header("Content-Disposition:attachment;filename=".$filename.""); 
+            fputcsv($output, (array)$fileMetaData['fileMetaData']);
+            foreach($contentData as $product) {
+                fputcsv($output, $product);
             }
+            fclose($output) or die("Can't close php://output");
+            die();
+            
 
-            array_walk($dataArray, "__outputCSV", $outstream);
-            fclose($outstream);
-            //die();
-             
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
 
     }
 
+    public static function generateCsvFileForTest($contentData = null, $filename= null)
+    {
+    
+        try { 
+
+            $fp = fopen($filename, 'wb');
+            //Write the header
+            fputcsv($fp, array_keys($contentData[0]));
+            //Write fields
+            foreach ($contentData as $fields) {
+                fputcsv($fp, $fields);
+            }
+            fclose($fp);
+            
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+
+    }
+
+ 
+    
 
 }

@@ -2,9 +2,11 @@
 
 namespace Reports\TurnOverReports;
 
-include('e:/xampp/htdocs/task_new/Reports/AbstractReport.php'); 
-include('e:/xampp/htdocs/task_new/Apps/DatabaseConnection.php'); 
-
+require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
+require_once (DOC_ROOT.'Reports/AbstractReport.php'); 
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsService.php'); 
+require_once (DOC_ROOT.'Apps/DatabaseConnection.php');  
+require_once (DOC_ROOT.'Apps/Healper/MapData.php');   
 
 use Exception;
 use Reports\AbstractReport;
@@ -16,28 +18,10 @@ use Model\TurnoverTopSelling;
 class TurnOverReportsGateway extends AbstractReport
 {
 
-    private $map = [
-        MapData::_DATABASE_MAP => [
-            parent::_TURNOVER_PER_BRAND => [
-                'name' => 'brandName',
-                'sum'  => 'totalTurnOver'
-            ],
-            parent::_TURNOVER_PER_DAY => [
-                'date' => 'day',
-                'sum'  => 'totalTurnOver'
-            ],
-            parent::_TURNOVER_TOP_SELLING => [
-                'name' => 'brandName',
-                'date'  => 'day',
-                'sum'  => 'totalTurnOver'
-            ] 
-        ]
-    ];
-
     public function getReportData(array $requestData)
     {
-
-        $objectArray = [];
+  
+        $retuenArray = array();
 
         if (empty($requestData)) {
             throw new \Exception('Request Data Empty');
@@ -46,115 +30,34 @@ class TurnOverReportsGateway extends AbstractReport
         $startDate = $requestData['startDate'];
         $endDate = $requestData['endDate'];
         $reportType = $requestData['reportType'];
+        
+        if ($reportType == parent::_TURNOVER_PER_BRAND) {
+           
+            $sql = "SELECT brands.name,(gmv.turnover) AS turnover, (gmv.turnover*0.79) AS finalturnover FROM brands LEFT JOIN gmv ON brands.id=gmv.brand_id WHERE gmv.date BETWEEN '".$startDate."' AND '".$endDate."'";
+            $data = $this->getReportsDataFromDatabase($sql); 
+            $retuenArray=$data; 
 
-        if ($reportType === parent::_TURNOVER_PER_BRAND) {
+        } elseif ($reportType == parent::_TURNOVER_PER_DAY) {
 
-            $sql = "SELECT brands.name, SUM(gmv.turnover - (gmv.turnover * 21/100)) as sum FROM brands
-                LEFT JOIN gmv ON brands.id = gmv.brand_id 
-                WHERE gmv.date BETWEEN $startDate AND $endDate  GROUP BY gmv.brand_id ";
-
-            $data = $this->getReportsDataFromDatabase($sql);
-  
-            foreach ($data as $reportData) {
-                $structReportData = $this->getObjectStructuredReportData(
-                    $this->map[MapData::_DATABASE_MAP][parent::_TURNOVER_PER_BRAND],
-                    $reportData
-                );
-
-                $objectArray[] = $this->hydrateTurnoverPerBrandData($structReportData);
-            }
-
-        } elseif ($reportType === parent::_TURNOVER_PER_DAY) {
-
-            $sql = "SELECT gmv.date, SUM(gmv.turnover - (gmv.turnover * 21/100))  as sum from brands 
-            LEFT JOIN gmv ON brands.id = gmv.brand_id 
-            WHERE gmv.date BETWEEN $startDate AND $endDate GROUP BY gmv.date " ;
+            $sql = "SELECT gmv.date AS selldate ,SUM(gmv.turnover) AS turnover, SUM(turnover*0.79) AS finalturnover FROM gmv WHERE date BETWEEN '".$startDate."' AND '".$endDate."' GROUP BY date";
 
             $data = $this->getReportsDataFromDatabase($sql);
- 
-            foreach ($data as $reportData) {
-                $structReportData = $this->getObjectStructuredReportData(
-                    $this->map[MapData::_DATABASE_MAP][parent::_TURNOVER_PER_DAY],
-                    $reportData
-                );
+            $retuenArray = $data;  
 
-                $objectArray[] = $this->hydrateTurnoverPerDayData($structReportData);
-            }
+        } elseif ($reportType == parent::_TURNOVER_TOP_SELLING) {
 
-        } elseif ($reportType === parent::_TURNOVER_TOP_SELLING) {
-
-            $sql = "SELECT brands.name,gmv.date, SUM(gmv.turnover - (gmv.turnover * 21/100))  as sum from brands 
-            LEFT JOIN gmv ON brands.id = gmv.brand_id 
-            WHERE gmv.date BETWEEN $startDate AND $endDate  GROUP BY gmv.date " ;
-
-            $data = $this->getReportsDataFromDatabase($sql);
- 
-            foreach ($data as $reportData) {
-                $structReportData = $this->getObjectStructuredReportData(
-                    $this->map[MapData::_DATABASE_MAP][parent::_TURNOVER_PER_DAY],
-                    $reportData
-                );
-
-                $objectArray[] = $this->hydrateTurnoverTopSellingData($structReportData);
-            }
+            $sql = "SELECT brands.name AS brandname ,SUM(gmv.turnover) AS turnover, SUM(turnover*0.79) AS finalturnover FROM gmv LEFT JOIN brands ON brands.id=gmv.brand_id WHERE date BETWEEN '".$startDate."' AND '".$endDate."' GROUP BY brandname ORDER BY finalturnover DESC LIMIT 10"; 
+            $data = $this->getReportsDataFromDatabase($sql); 
+            $retuenArray = $data;
 
         } else {
                 throw new \Exception('Report type not found');
         } 
 
-        return $objectArray;
+        return $retuenArray;
     }
  
  
-    private function hydrateTurnoverPerBrandData(array $perBrandData, TurnoverPerBrand $turnoverPerBrandObj = null)
-    {
-        $turnoverPerBrandObj = new TurnoverPerBrand();
-
-        if (!empty($perBrandData['brandName'])) {
-            $turnoverPerBrandObj->setBrandName($perBrandData['brandName']);
-        }
-
-        if (!empty($perBrandData['totalTurnOver'])) {
-            $turnoverPerBrandObj->setTotalTurnOver($perBrandData['totalTurnOver']);
-        }
-
-        return $turnoverPerBrandObj;
-    }
-
-    private function hydrateTurnoverPerDayData(array $perDayData, TurnoverPerDay $turnoverPerDayObj = null)
-    {
-        $turnoverPerDayObj = new TurnoverPerDay();
-
-        if (!empty($perDayData['day'])) {
-            $turnoverPerDayObj->setDay($perDayData['day']);
-        }
-
-        if (!empty($perDayData['totalTurnOver'])) {
-            $turnoverPerDayObj->setTotalTurnOver($perDayData['totalTurnOver']);
-        }
-
-        return $turnoverPerDayObj;
-    }
-
-    private function hydrateTurnoverTopSellingData(array $perDayData, TurnoverPerDay $turnoverTopSellingObj = null)
-    {
-  
-        $turnoverTopSellingObj = new TurnoverTopSelling();
-     
-        if (!empty($perBrandData['brandName'])) {
-            $turnoverTopSellingObj->setBrandName($perBrandData['brandName']);
-        }
-
-        if (!empty($perDayData['day'])) {
-            $turnoverTopSellingObj->setDay($perDayData['day']);
-        }
-
-        if (!empty($perDayData['totalTurnOver'])) {
-            $turnoverTopSellingObj->setTotalTurnOver($perDayData['totalTurnOver']);
-        }
-
-        return $turnoverTopSellingObj;
-    }
-
+ 
  
 }

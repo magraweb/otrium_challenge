@@ -1,62 +1,90 @@
 <?php declare(strict_types=1);
 
-require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
-require_once ('e:/xampp/htdocs/task_new/Model/TurnOverPerBrand.php');
-require_once ('e:/xampp/htdocs/task_new/Model/TurnoverPerDay.php');
-require_once ('e:/xampp/htdocs/task_new/Model/TurnoverTopSelling.php');
+require_once ('e:/xampp/htdocs/task_new/Config/config.php');
+error_reporting(E_ALL);
 
-require_once ('e:/xampp/htdocs/task_new/Reports/TurnOverReports/TurnOverReportsController.php');
-require_once ('e:/xampp/htdocs/task_new/Reports/TurnOverReports/TurnOverReportsGateway.php');
-require_once ('e:/xampp/htdocs/task_new/Apps/Healper/MapData.php');
+require_once (DOC_ROOT.'Model/TurnOverPerBrand.php');
+require_once (DOC_ROOT.'Model/TurnoverPerDay.php');
+require_once (DOC_ROOT.'Model/TurnoverTopSelling.php');
+
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsController.php');
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsGateway.php');
+require_once (DOC_ROOT.'Apps/Healper/MapData.php');
+require_once (DOC_ROOT.'Apps/CsvGenerator.php'); 
 
 use \PHPUnit\Framework\TestCase;
 use Model\TurnoverPerBrand as TurnoverPerBrand;
 use Model\TurnoverPerDay as TurnoverPerDay;
-use Model\TurnoverTopSelling as TurnoverTopSelling;
-use Reports\TurnOverReports as Gateway;
+use Model\TurnoverTopSelling as TurnoverTopSelling; 
+use Reports\TurnOverReports as Tor;
 
 class TurnOverReportsGatewayTest extends TestCase
 {
 
     public function testTurnOverPerBrand()
-    {
-        $reportsGateway = new Gateway\TurnOverReportsGateway();
-        $requestData['startDate'] = '2018-05-01';
-        $requestData['endDate'] = '2018-05-07';  
-        $requestData['reportType'] = 'TURNOVER_PER_BRAND';
-        $data = $reportsGateway->getReportData($requestData);
+    { 
+        $reqArr=array(
+            'startDate'=>'2018-05-01',
+            'endDate'=> '2018-05-07',
+            'reportType'=> 'TURNOVER_PER_BRAND'
+        );
+  
+        $TurnOverReportsGateway = new Tor\TurnOverReportsGateway();
+        $responceData = $TurnOverReportsGateway->getReportData($reqArr);
+        
+        $this->assertIsArray(
+            $responceData,
+            "assert variable is array or not"
+        );
 
-        $this->assertIsArray($data);
-        if (count($data) > 0) {
-            $this->assertInstanceOf(TurnoverPerBrand::class, $data[0]);
-        }
+        $filename= DOC_ROOT.'UnitTest/test_data/'.$reqArr['reportType'].'_'.rand(1,99).time().'.csv';
+ 
+        Apps\CsvGenerator::generateCsvFileForTest($responceData ,$filename);
+
     }
 
-    public function testTurnOverPerDay()
-    {
-        $reportsGateway = new Gateway\TurnOverReportsGateway();
-        $requestData['startDate'] = '2018-05-01';
-        $requestData['endDate'] = '2018-05-07';  
-        $requestData['reportType'] = 'TURNOVER_PER_DAY';
-        $data = $reportsGateway->getReportData($requestData);
+    public function testTurnoverPerDay()
+    { 
+        $reqArr=array(
+            'startDate'=>'2018-05-01',
+            'endDate'=> '2018-05-07',
+            'reportType'=> 'TURNOVER_PER_DAY'
+        );
+  
+        $TurnOverReportsGateway = new Tor\TurnOverReportsGateway();
+        $responceData = $TurnOverReportsGateway->getReportData($reqArr);
 
-        $this->assertIsArray($data);
-        if (count($data) > 0) {
-            $this->assertInstanceOf(TurnoverPerDay::class, $data[0]);
-        }
+        $this->assertIsArray(
+            $responceData,
+            "assert variable is array or not"
+        );
+ 
+        $filename= DOC_ROOT.'UnitTest/test_data/'.$reqArr['reportType'].'_'.rand(1,99).time().'.csv';
+
+        Apps\CsvGenerator::generateCsvFileForTest($responceData ,$filename);
+
     }
 
     public function testTurnoverTopSelling()
-    {
-        $reportsGateway = new Gateway\TurnOverReportsGateway();
-        $requestData['startDate'] = '2018-05-01';
-        $requestData['endDate'] = '2018-05-07';  
-        $requestData['reportType'] = 'TURNOVER_TOP_SELLING';
-        $data = $reportsGateway->getReportData($requestData);
+    { 
+        $reqArr=array(
+            'startDate'=>'2018-05-01',
+            'endDate'=> '2018-05-07',
+            'reportType'=> 'TURNOVER_TOP_SELLING'
+        );
+  
+        $TurnOverReportsGateway = new Tor\TurnOverReportsGateway();
+        $responceData = $TurnOverReportsGateway->getReportData($reqArr);
 
-        $this->assertIsArray($data);
-        if (count($data) > 0) {
-            $this->assertInstanceOf(TurnoverTopSelling::class, $data[0]);
-        }
+        $this->assertIsArray(
+            $responceData,
+            "assert variable is array or not"
+        );
+ 
+        $filename= DOC_ROOT.'UnitTest/test_data/'.$reqArr['reportType'].'_'.rand(1,99).time().'.csv';
+        
+        Apps\CsvGenerator::generateCsvFileForTest($responceData ,$filename);
+
     }
+ 
 }

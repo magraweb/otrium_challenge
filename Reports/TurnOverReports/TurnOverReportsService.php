@@ -4,6 +4,10 @@ namespace Reports\TurnOverReports;
 
 use Reports\AbstractReport; 
 
+require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
+require_once (DOC_ROOT.'Reports/AbstractReport.php');   
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsGateway.php');  
+
 class TurnOverReportsService
 {
     private $reportGateway;

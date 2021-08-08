@@ -25,27 +25,14 @@
         </div>
     </nav>
 
-
-
 <main class="container">
     <div class="starter-template text-center py-5 px-3">
         <h1>Report App</h1>
         <p>Download Report in CSV</p>
     </div>
-
  
-        <figure class="text-center">
-            <blockquote class=" "> 
 
-                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-brand" type="submit" class="btn btn-primary">Brand Report</a>
-                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-day" type="submit" class="btn btn-primary">Day Report</a>
-                <a href="<?= SITE_URL?>Apps/AppsContoller.php?action=turn-over-per-day-per-brand" type="submit" class="btn btn-primary">Top Selling</a>
-
-            </blockquote>
-        </figure> 
-
-
-      <!-- <form action="controller/report.controller.php" method="post">
+      <form action="<?= SITE_URL?>Apps/AppsContoller.php" method="post">
         <figure class="text-center">
             <blockquote class=" ">
 
@@ -54,26 +41,28 @@
                 <br />  <br />
                 <input type="text" name="startDate" value="05/01/2018" class="datepicker" />
                 <input type="text" name="endDate" value="05/07/2018" class="datepicker" />
-
+                <br />
+                <code> *result from 05/01/2018 to 05/07/2018</code> 
                 <br /><br /> <br />
                 <label class="text-uppercase  fw-bolder">Report Type</label>
                 <br /> <br />
                 <label>Brand Report</label>
-                <input type="radio" name="reportType" value="brandwise" checked /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="reportType" value="turnOverPerBrand" checked /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <label>Day Report</label>
-                <input type="radio" name="reportType" value="daywise" />
-                <br /> <br />
+                <input type="radio" name="reportType" value="turnoverPerDay" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+                <label>Top Selling Brands</label>
+                <input type="radio" name="reportType" value="turnoverTopSelling" />
+                <br /> <br /><br /> <br />
+              
                 <button type="submit" class="btn btn-primary">Generate Report</button>
 
             </blockquote>
         </figure>
-    </form> -->
+    </form>  
 </main>
 
-
 </body>
-
 
 <?php include 'Views/footer.php'; ?>

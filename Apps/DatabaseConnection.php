@@ -2,6 +2,9 @@
 
 namespace Apps;
 
+//require_once ('../Config/config.php'); 
+require_once ('e:/xampp/htdocs/task_new/Config/config.php'); 
+
 use Apps\DatabaseConnection as DatabaseConnections;
 
 class DatabaseConnection
@@ -13,8 +16,7 @@ class DatabaseConnection
     public static $instanceFun;
 
     private function __construct()
-    {
-        require_once 'Config/config.php';
+    { 
 
         $this->serverName = DB_SERVER;
         $this->username = DB_USER;
