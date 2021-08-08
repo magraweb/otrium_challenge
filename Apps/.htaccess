@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^reports/([a-zA-Z0-9_-]+)_([0-9]+)$ Apps/AppsContoller.php?action=$1 [NC]

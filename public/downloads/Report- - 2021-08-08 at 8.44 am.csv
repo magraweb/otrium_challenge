@@ -1,0 +1,50 @@
+ turn-over-per-brandarray(3) {
+  ["startDate"]=>
+  string(10) "2018-05-01"
+  ["endDate"]=>
+  string(10) "2018-05-07"
+  ["reportType"]=>
+  string(22) "turnOverPerBrandAction"
+}
+<br/>--------- $requestData ---------- <br/>Array
+(
+    [startDate] => 2018-05-01
+    [endDate] => 2018-05-07
+    [reportType] => TURNOVER_PER_BRAND
+)
+<br/>--------- $requestData ---------- <br/>id,name,description
+O-Brand,8400.2754
+O-Brand,8716.4176
+O-Brand,6356.7745
+O-Brand,473.7709
+O-Brand,23896.9628
+O-Brand,2190.4093
+O-Brand,25875.9444
+T-Brand,17937.5267
+T-Brand,31883.1597
+T-Brand,615.8050
+T-Brand,16501.1961
+T-Brand,31167.3407
+T-Brand,1015.7820
+T-Brand,20698.6162
+R-Brand,25360.9355
+R-Brand,9239.4608
+R-Brand,31906.8202
+R-Brand,31444.7097
+R-Brand,6837.4816
+R-Brand,21181.0297
+R-Brand,7847.5756
+I-Brand,6557.3555
+I-Brand,4343.5701
+I-Brand,8174.3907
+I-Brand,27490.9335
+I-Brand,2965.9286
+I-Brand,25626.2807
+I-Brand,4244.4251
+U-Brand,21321.1046
+U-Brand,20508.1156
+U-Brand,26504.6580
+U-Brand,26617.5648
+U-Brand,29715.8737
+U-Brand,30196.0357
+U-Brand,7593.2667

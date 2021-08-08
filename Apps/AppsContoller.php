@@ -1,59 +1,83 @@
-<?php
+<?php 
+
 namespace Apps;
-//require_once  ('Routes/web.php');
-require_once ('../boostrap.php');
-require_once ('../Config/config.php');
+ 
+require_once ('../Config/config.php'); 
+require_once (DOC_ROOT.'Model/TurnOverPerBrand.php');
+require_once (DOC_ROOT.'Model/TurnoverPerDay.php');
+require_once (DOC_ROOT.'Model/TurnoverTopSelling.php');
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsController.php'); 
+require_once (DOC_ROOT.'Reports/TurnOverReports/TurnOverReportsService.php'); 
+ 
+use Reports\TurnOverReports as Tor;
 
 class AppsContoller
 {
     private $request_url;
-    private $routeConfig;
-    private $webArray;
-
-    const _REPORT = 'reports';
-
-    public function __construct()
-    {
-        $this->request_url = $_SERVER['REQUEST_URI'];
+    private $start_date;
+    private $end_date;
   
-        $this->RunActionReport();
- 
+    public function __construct()
+    {   
+        $this->setStartDate(date("Y-m-d",strtotime(trim($_POST['startDate'])))); //'2018-05-01'
+        $this->setEndDate(date("Y-m-d",strtotime(trim($_POST['endDate'])))); //$_GET'2018-05-07'
+        $this->setRoute(trim($_POST['reportType'])); // turnOverPerBrand  | turnoverPerDay | turnoverTopSelling
+        $this->RunActionReport(); 
     }
 
     private function getRoute()
-    {
-        if (!isset($this->routeConfig)) {
-            $this->setRoute();
-        }
-
-        return $this->routeConfig;
+    { 
+        return $this->request_url;
     }
 
-    private function setRoute()
-    {
-        //$this->routeConfig = $this->webArray;
-        $this->routeConfig = include 'Routes/web.php';
+    function setRoute($url)
+	{
+		$this->request_url = $url;
+	}
+
+    private function getStartDate()
+    { 
+        return $this->start_date;
     }
+
+    function setStartDate($startDate)
+	{
+		$this->start_date = $startDate;
+	}
+
+    private function getEndDate()
+    { 
+        return $this->end_date;
+    }
+
+    function setEndDate($endDate)
+	{
+		$this->end_date = $endDate;
+	}
 
     public function RunActionReport()
-    {
-        echo 'working';
-        if ($this->getRoute()['routes'][$this->request_url]) {
+    { 
+        $reqArr=array(
+            'startDate'=> $this->getStartDate(),
+            'endDate'=> $this->getEndDate(),
+            'reportType'=>$this->getRoute()
+        );
  
-            // get the raw POST data
-            $rawData = file_get_contents("php://input");
-  
-            $class =  $this->getRoute()['routes'][$this->request_url]['controller'];
-            $classObj = new  $class();
-            $data = $classObj->{$this->getRoute()['routes'][$this->request_url]['action']}($rawData);
-
-            header('Location:'.SITE_URL.'?e='. $data);
+        if ($this->getRoute()) { 
+ 
+            $classObj = new Tor\TurnOverReportsController(); 
+            $classObj->{$this->getRoute()}($reqArr); 
 
         } else {
-            throw new \Exception('Request Url Not Found');
-            header('Location:'.SITE_URL.'?e=Request Url Not Found');
-
+            throw new \Exception('Request Url Not Found');  
         }
     }
 
+}
+
+ 
+try {
+    $actionFactory = new  AppsContoller();
+} catch (\Exception $e) {
+    echo $e->getMessage();
 }
